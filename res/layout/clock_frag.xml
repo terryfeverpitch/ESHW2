@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clock_frag"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="clock fragment." />
+
+    <EditText
+        android:id="@+id/clock_et_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/clock_tv_date"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/clock_tv_date"
+        android:ems="10"
+        android:inputType="date" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/clock_btn_system"
+            android:layout_width="fill_parent"
+            android:layout_height="30sp"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:text="System Time"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/clock_btn_set"
+            android:layout_width="fill_parent"
+            android:layout_height="30sp"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:text="SET"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/clock_view_line"
+        android:layout_width="fill_parent"
+        android:layout_height="3sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/clock_et_date"
+        android:background="#88FFFFFF" />
+
+    <TextView
+        android:id="@+id/clock_tv_warning"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/clock_et_date"
+        android:layout_alignParentLeft="true"
+        android:text="System time"
+        android:textColor="#AA00FF00"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/View01"
+        android:layout_width="fill_parent"
+        android:layout_height="3sp"
+        android:layout_above="@+id/clock_tv_warning"
+        android:layout_alignParentLeft="true"
+        android:background="#88FFFFFF" />
+
+    <EditText
+        android:id="@+id/clock_et_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/clock_tv_time"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/clock_tv_time"
+        android:ems="10"
+        android:inputType="time" >
+
+        <requestFocus />
+    </EditText>
+
+    <RadioGroup
+        android:id="@+id/clock_rg_ampm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/clock_rd_am"
+            android:layout_width="94dp"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="AM" />
+
+        <RadioButton
+            android:id="@+id/clock_rd_pm"
+            android:layout_width="94dp"
+            android:layout_height="wrap_content"
+            android:text="PM" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/clock_tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/clock_rg_ampm"
+        android:layout_alignParentLeft="true"
+        android:text="Hour:Minute:Second:" />
+
+    <TextView
+        android:id="@+id/clock_tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/clock_et_time"
+        android:layout_alignParentLeft="true"
+        android:text="Year-Month-Date:"
+        android:textSize="16sp" />
+
+    <com.example.eshw2.Clock
+        android:id="@+id/clock_view_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/View01"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1" />
+
+</RelativeLayout>
