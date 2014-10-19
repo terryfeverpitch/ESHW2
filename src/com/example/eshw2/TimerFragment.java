@@ -43,8 +43,8 @@ public class TimerFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		numArray = new int[100];
-        for(int i = 0; i <= 99 ; i++)
+		numArray = new int[60];
+        for(int i = 0; i < 60 ; i++)
         		numArray[i] = i;
         
         saved[0] = h;
@@ -212,7 +212,7 @@ public class TimerFragment extends Fragment {
 				switch(pressed) {
             			case 1: //hour
             				h = th + dist / 20;
-            				h = (h < 0) ? (100 - numArray[(-h) % 100]) : (numArray[h % 100]);
+            				h = (h < 0) ? (13 - numArray[(-h) % 13]) : (numArray[h % 13]);
             				timer_tv_hr.setText(fix(h, 2) + "h");
             				break;
 		            	case 2: //min
