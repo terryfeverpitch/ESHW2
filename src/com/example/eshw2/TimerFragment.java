@@ -156,9 +156,9 @@ public class TimerFragment extends Fragment {
 		public void onTick(long millisUntilFinished) {
 			// TODO Auto-generated method stub
 			int millisecond = saved[3] = (int) (millisUntilFinished % 1000);
-            int second = saved[2] = (int) (millisUntilFinished / 1000 % 60);
-            int minute = saved[1] = (int) (millisUntilFinished / 60000 % 60);
-            int hour	   = saved[0] = (int) (millisUntilFinished / 3600000 % 60);
+            int second 		= saved[2] = (int) (millisUntilFinished / 1000 % 60);
+            int minute 		= saved[1] = (int) (millisUntilFinished / 60000 % 60);
+            int hour	    = saved[0] = (int) (millisUntilFinished / 3600000 % 60);
 
             timer_tv_hr.setText(fix(hour, 2) + "h");
             timer_tv_m.setText(fix(minute, 2) + "m");

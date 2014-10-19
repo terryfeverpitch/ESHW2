@@ -37,7 +37,8 @@
 			android:layout_weight="1"
 			android:text="00h" 
 			android:textSize="20sp"
-			android:gravity="center" />
+			android:gravity="center" 
+			android:background="@drawable/shape"/>
 	 	<TextView 
 			android:id="@+id/timer_tv_m"
 			android:layout_height="wrap_content" 	 
@@ -45,7 +46,8 @@
 			android:layout_weight="1"
 			android:text="00m"	 
 			android:textSize="20sp"
-			android:gravity="center" />
+			android:gravity="center" 
+			android:background="@drawable/shape"/>
 		<TextView 
 			android:id="@+id/timer_tv_s"
 			android:layout_height="wrap_content" 
@@ -53,7 +55,8 @@
 			android:layout_weight="1"			
 			android:text="00.000s" 	  
 			android:textSize="20sp"
-			android:gravity="center" />
+			android:gravity="center" 
+			android:background="@drawable/shape"/>
 	</LinearLayout>
 	
 	<LinearLayout

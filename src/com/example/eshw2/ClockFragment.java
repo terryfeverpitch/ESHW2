@@ -21,29 +21,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class ClockFragment extends Fragment {
-	private String[] array_date = new String[31];
 	private SimpleDateFormat dateFormat, timeFormat;
 	
 	private TextView clock_tv_warning;
 	private EditText clock_et_date, clock_et_time;
 	private Button clock_btn_set, clock_btn_system;
 	private RadioGroup clock_rg_ampm;
+	private Clock clock_view_display;
+	private String currentDate, currentTime;
+	private int AMPM;
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		
-		for(int i = 0; i < 31; i++) {
-			String str = String.valueOf(i);
-			if(str.length() == 1) 
-				array_date[i] = "0" + str;
-			else 
-				array_date[i] = str;
-		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {	
 		return inflater.inflate(R.layout.clock_frag, container, false);
 	}
 	
@@ -53,31 +46,31 @@ public class ClockFragment extends Fragment {
 		View v = this.getView();
 	    TextView tv = (TextView) v.findViewById(R.id.textView1);
 	    tv.setTypeface(Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Ubuntu.ttf"));
-	    	
+	    
+	    clock_view_display = (Clock) v.findViewById(R.id.clock_view_display);
+	    
 	    dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	    dateFormat.setLenient(false);
-	    timeFormat = new SimpleDateFormat("hh:mm:ss a");
+	    timeFormat = new SimpleDateFormat("hh:mm:ss");
 	    timeFormat.setLenient(false);
 	    clock_rg_ampm = (RadioGroup) v.findViewById(R.id.clock_rg_ampm);
 	    Date date = new Date();
-	    String currentDate = dateFormat.format(date);
-	    String currentTime = timeFormat.format(date);
+	    currentDate = dateFormat.format(date);
+	    currentTime = timeFormat.format(date);
 	    	
 	    clock_et_date = (EditText) v.findViewById(R.id.clock_et_date);
 	    clock_et_date.setText(currentDate); 
-	    
 	    clock_et_time = (EditText) v.findViewById(R.id.clock_et_time);
 	    clock_et_time.setText(currentTime); 
 	    
-	    int AMPM = dateFormat.getCalendar().get(Calendar.AM_PM);
+	    AMPM = dateFormat.getCalendar().get(Calendar.AM_PM);
 	    if(AMPM == Calendar.PM) {
-	    		clock_rg_ampm.check(R.id.clock_rd_pm);
+	    	clock_rg_ampm.check(R.id.clock_rd_pm);
 	    }
 	     
 	    clock_tv_warning = (TextView) v.findViewById(R.id.clock_tv_warning);
 	    clock_btn_set = (Button) v.findViewById(R.id.clock_btn_set); 
 	    clock_btn_set.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -111,6 +104,8 @@ public class ClockFragment extends Fragment {
 					
 					if(s[0].length() <= 1)
 						s[0] = "0" + s[0];
+					if(s[0].equals("00"))
+						s[0] = "12";
 					if(s[1].length() <= 1)
 						s[1] = "0" + s[1];
 					if(s[2].length() <= 1)
@@ -127,12 +122,48 @@ public class ClockFragment extends Fragment {
 				if(fine) {
 					clock_tv_warning.setTextColor(Color.parseColor("#AA00FF00"));
 					clock_tv_warning.setText("Success");
+					currentDate = clock_et_date.getText().toString();
+					currentTime = clock_et_time.getText().toString();
+					
+					String[] dd = clock_et_date.getText().toString().split("-");
+					String[] tt = clock_et_time.getText().toString().split(":");
+					
+					Calendar cal = Calendar.getInstance();
+					cal.set(Calendar.YEAR, str2Int(dd[0]));
+					cal.set(Calendar.MONTH, str2Int(dd[1])- 1);
+					cal.set(Calendar.DAY_OF_MONTH, str2Int(dd[2]));
+					cal.set(Calendar.HOUR, str2Int(tt[0]));
+					cal.set(Calendar.MINUTE, str2Int(tt[1]));
+					cal.set(Calendar.SECOND, str2Int(tt[2]));
+					
+					if(clock_rg_ampm.getCheckedRadioButtonId() == R.id.clock_rd_pm) {
+						cal.set(Calendar.AM_PM, Calendar.PM);
+						clock_tv_warning.setText(currentDate + " " + currentTime + " PM");
+					}
+					else {
+						//cal.set(str2Int(dd[0]), str2Int(dd[1]) - 1, str2Int(dd[2]), str2Int(tt[0]), str2Int(tt[1]), str2Int(tt[2]));
+						cal.set(Calendar.AM_PM, Calendar.AM);
+						clock_tv_warning.setText(currentDate + " " + currentTime + " AM");
+					}
+					clock_view_display.setCalendar(cal);
 				}
 				else {
 					clock_tv_warning.setTextColor(Color.parseColor("#AAFF0000"));
 					clock_tv_warning.setText(msg);
 				}
 			}	
+	    });
+	    
+	    clock_btn_system = (Button) v.findViewById(R.id.clock_btn_system);
+	    clock_btn_system.setSelected(true);
+	    clock_btn_system.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				clock_view_display.setCalendar(Calendar.getInstance());
+				clock_tv_warning.setTextColor(Color.parseColor("#AA00FF00"));
+				clock_tv_warning.setText("System time");
+			}
 	    });
 	}
 	
@@ -144,48 +175,7 @@ public class ClockFragment extends Fragment {
 		timeFormat.parse(clock_et_time.getText().toString());
 	}
 	
-	InputFilter timeFilter = new InputFilter() {
-		@Override
-		public CharSequence filter(CharSequence source, int start, int end,
-				Spanned dest, int dstart, int dend) {
-			// TODO Auto-generated method stub
-			if (source.length() == 0) {
-                return null;// deleting, keep original editing
-            }
-            String result = "";
-            result += dest.toString().substring(0, dstart);
-            result += source.toString().substring(start, end);
-            result += dest.toString().substring(dend, dest.length());
-
-            if (result.length() > 5) {
-                return "";// do not allow this edit
-            }
-            boolean allowEdit = true;
-            char c;
-            if (result.length() > 0) {
-                c = result.charAt(0);
-                allowEdit &= (c >= '0' && c <= '2');
-            }
-            if (result.length() > 1) {
-                c = result.charAt(1);
-                if(result.charAt(0) == '0' || result.charAt(0) == '1')
-                    allowEdit &= (c >= '0' && c <= '9');
-                else
-                    allowEdit &= (c >= '0' && c <= '3');
-            }
-            if (result.length() > 2) {
-                c = result.charAt(2);
-                allowEdit &= (c == ':');
-            }
-            if (result.length() > 3) {
-                c = result.charAt(3);
-                allowEdit &= (c >= '0' && c <= '5');
-            }
-            if (result.length() > 4) {
-                c = result.charAt(4);
-                allowEdit &= (c >= '0' && c <= '9');
-            }
-            return allowEdit ? null : "";
-		}
-    };
+	private int str2Int(String str) {
+		return Integer.valueOf(str);
+	}
 }
